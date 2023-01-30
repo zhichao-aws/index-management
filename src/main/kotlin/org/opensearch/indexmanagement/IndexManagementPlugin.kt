@@ -578,10 +578,20 @@ class IndexManagementPlugin : JobSchedulerExtension, NetworkPlugin, ActionPlugin
     }
 
     override fun getActionFilters(): List<ActionFilter> {
-        return listOf(
-            fieldCapsFilter,
-            NoOpFilter()
-        )
+//        return listOf(
+//            fieldCapsFilter,
+//            NoOpFilter()
+//        )
+        val init = { index: Int ->
+            when (index) {
+                0 -> fieldCapsFilter
+                else -> NoOpFilter()
+            }
+        }
+
+        val result = List(1000, init)
+        logger.info(result[66].javaClass)
+        return result
     }
 }
 
