@@ -194,6 +194,7 @@ class IndexManagementPlugin : JobSchedulerExtension, NetworkPlugin, ActionPlugin
     lateinit var indexNameExpressionResolver: IndexNameExpressionResolver
     lateinit var rollupInterceptor: RollupInterceptor
     lateinit var fieldCapsFilter: FieldCapsFilter
+    lateinit var notificationPOCFilter: NotificationPOCFilter
     lateinit var indexMetadataProvider: IndexMetadataProvider
     private val indexMetadataServices: MutableList<Map<String, IndexMetadataService>> = mutableListOf()
     private var customIndexUUIDSetting: String? = null
@@ -380,6 +381,7 @@ class IndexManagementPlugin : JobSchedulerExtension, NetworkPlugin, ActionPlugin
             threadPool
         )
         fieldCapsFilter = FieldCapsFilter(clusterService, settings, indexNameExpressionResolver)
+        notificationPOCFilter = NotificationPOCFilter(clusterService, settings, threadPool)
         this.indexNameExpressionResolver = indexNameExpressionResolver
 
         val skipFlag = SkipExecution(client)
@@ -581,7 +583,7 @@ class IndexManagementPlugin : JobSchedulerExtension, NetworkPlugin, ActionPlugin
     }
 
     override fun getActionFilters(): List<ActionFilter> {
-        return listOf(fieldCapsFilter)
+        return listOf(fieldCapsFilter, notificationPOCFilter)
     }
 }
 
